@@ -14,7 +14,7 @@ public class CSE305Lab {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
+        System.out.println("cse305.lab.CSE305Lassssssb.main()");
     }
     
 }
