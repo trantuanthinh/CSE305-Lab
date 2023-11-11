@@ -1,27 +1,20 @@
 package concreteBuilder;
 
+import builder.Property;
 import builder.PropertyOwner;
 
 public class PropertyOwnerImpl implements PropertyOwner {
 
     @Override
-    public void listProperty() {
-      
+    public PropertyOwner addProperty(Property property) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'addProperty'");
     }
 
     @Override
-    public void createProperty() {
-      
-    }
-
-    @Override
-    public void udateProperty() {
-
-    }
-
-    @Override
-    public void deleteProperty() {
-      
+    public product.PropertyOwner build() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'build'");
     }
     
 }

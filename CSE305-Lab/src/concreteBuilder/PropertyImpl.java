@@ -5,18 +5,27 @@ import builder.Property;
 public class PropertyImpl implements Property {
 
     @Override
-    public void createProperty() {
-       
+    public Property setPropertyID(long propertyID) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'setPropertyID'");
     }
 
     @Override
-    public void updateProperty() {
-      
+    public Property setDescription(String description) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'setDescription'");
     }
 
     @Override
-    public void deteleProperty() {
-      
+    public Property setRentalRate(float rentalRate) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'setRentalRate'");
+    }
+
+    @Override
+    public product.Property build() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'build'");
     }
 
 }

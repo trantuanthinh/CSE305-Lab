@@ -1,9 +1,8 @@
 package builder;
 
 public interface Property {
-    void createProperty();
-
-    void updateProperty();
-
-    void deteleProperty();
+    Property setPropertyID(long propertyID);
+    Property setDescription(String description);
+    Property setRentalRate(float rentalRate);
+    product.Property build();
 }

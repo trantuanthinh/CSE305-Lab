@@ -1,7 +1,11 @@
 package builder;
 
 public interface RentalContract {
-    void createContract();
-
-    void terminateContract();
+    RentalContract setContractID(long contractID);
+    RentalContract setPropertyID(long propertyID);
+    RentalContract setTenantID(long tenantID);
+    RentalContract setStartDate(String startDate);
+    RentalContract setEndDate(String endDate);
+    RentalContract setRentAmount(float rentAmount);
+    product.RentalContract build();
 }
