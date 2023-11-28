@@ -6,8 +6,12 @@ import Builder.BusRoute;
 import Builder.BusStopList;
 import Product.CreateBus;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Vector;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 public class MainMenu extends javax.swing.JFrame {
 
@@ -16,6 +20,7 @@ public class MainMenu extends javax.swing.JFrame {
 
     public MainMenu() {
         initComponents();
+
 //        System.out.println(busStopList.getBusStopList().size());
 //        System.out.println(busRouteList.getBusRouteList().size());
         DefaultComboBoxModel locationStart_Model = new DefaultComboBoxModel<>();
@@ -116,6 +121,8 @@ public class MainMenu extends javax.swing.JFrame {
         endLabel = new javax.swing.JLabel();
         endCombobox = new javax.swing.JComboBox<>();
         checkButton = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tableModel = new javax.swing.JTable();
         BusRoutes = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
         BusStop = new javax.swing.JPanel();
@@ -125,9 +132,17 @@ public class MainMenu extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        Home.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
         startLabel.setText("Start");
+        Home.add(startLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 60, 37, -1));
+
+        Home.add(startComboBox, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 60, 110, -1));
 
         endLabel.setText("End");
+        Home.add(endLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 60, 37, 20));
+
+        Home.add(endCombobox, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 60, 140, 20));
 
         checkButton.setText("Check");
         checkButton.addActionListener(new java.awt.event.ActionListener() {
@@ -135,41 +150,29 @@ public class MainMenu extends javax.swing.JFrame {
                 checkButtonActionPerformed(evt);
             }
         });
+        Home.add(checkButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 60, 80, 20));
 
-        javax.swing.GroupLayout HomeLayout = new javax.swing.GroupLayout(Home);
-        Home.setLayout(HomeLayout);
-        HomeLayout.setHorizontalGroup(
-            HomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(HomeLayout.createSequentialGroup()
-                .addGap(37, 37, 37)
-                .addGroup(HomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(checkButton)
-                    .addGroup(HomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(HomeLayout.createSequentialGroup()
-                            .addComponent(endLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(endCombobox, javax.swing.GroupLayout.PREFERRED_SIZE, 218, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(HomeLayout.createSequentialGroup()
-                            .addComponent(startLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(startComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 218, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(324, Short.MAX_VALUE))
-        );
-        HomeLayout.setVerticalGroup(
-            HomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(HomeLayout.createSequentialGroup()
-                .addGap(23, 23, 23)
-                .addGroup(HomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(startLabel)
-                    .addComponent(startComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(HomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(endLabel)
-                    .addComponent(endCombobox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(checkButton)
-                .addContainerGap(387, Short.MAX_VALUE))
-        );
+        tableModel.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null},
+                {null},
+                {null},
+                {null},
+                {null},
+                {null},
+                {null},
+                {null},
+                {null},
+                {null},
+                {null}
+            },
+            new String [] {
+                "Bus Number"
+            }
+        ));
+        jScrollPane1.setViewportView(tableModel);
+
+        Home.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 120, 370, 170));
 
         jTabbedPane3.addTab("Home", Home);
 
@@ -182,7 +185,7 @@ public class MainMenu extends javax.swing.JFrame {
             .addGroup(BusRoutesLayout.createSequentialGroup()
                 .addGap(175, 175, 175)
                 .addComponent(jButton1)
-                .addContainerGap(331, Short.MAX_VALUE))
+                .addContainerGap(259, Short.MAX_VALUE))
         );
         BusRoutesLayout.setVerticalGroup(
             BusRoutesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -205,7 +208,7 @@ public class MainMenu extends javax.swing.JFrame {
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(busStopComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(368, Short.MAX_VALUE))
+                .addContainerGap(296, Short.MAX_VALUE))
         );
         BusStopLayout.setVerticalGroup(
             BusStopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -223,7 +226,7 @@ public class MainMenu extends javax.swing.JFrame {
         Route.setLayout(RouteLayout);
         RouteLayout.setHorizontalGroup(
             RouteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 622, Short.MAX_VALUE)
+            .addGap(0, 550, Short.MAX_VALUE)
         );
         RouteLayout.setVerticalGroup(
             RouteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -238,15 +241,13 @@ public class MainMenu extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jTabbedPane3)
-                .addContainerGap())
+                .addComponent(jTabbedPane3))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(14, 14, 14)
-                .addComponent(jTabbedPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 526, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jTabbedPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 526, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         pack();
@@ -257,14 +258,29 @@ public class MainMenu extends javax.swing.JFrame {
         String start = startComboBox.getSelectedItem().toString();
         String end = endCombobox.getSelectedItem().toString();
         List<BusRoute> routesFromAToB = findAllRoutes(start, end);
-        if (!routesFromAToB.isEmpty()) {
+        
+        DefaultTableModel tableModel = (DefaultTableModel) this.tableModel.getModel();
+        tableModel.setRowCount(0);
+//        !routesFromAToB.isEmpty()
+        if (!start.equalsIgnoreCase(end)) {
             System.out.println("Routes found ");
+            
+            
             for (BusRoute route : routesFromAToB) {
+                
+
                 System.out.println("Route Number: " + route.getRouteNumber());
+               
+                tableModel.addRow(new Object[]{route.getRouteNumber()});
             }
+
         } else {
-            System.out.println("No routes found from " + start + " to " + end + ".");
+            String errorMessage = "No routes found from " + start + " to " + end + ".";
+            JOptionPane.showMessageDialog(this, errorMessage);
+            System.out.println(errorMessage);
         }
+
+
     }//GEN-LAST:event_checkButtonActionPerformed
 
     /**
@@ -321,8 +337,10 @@ public class MainMenu extends javax.swing.JFrame {
     private javax.swing.JLabel endLabel;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTabbedPane jTabbedPane3;
     private javax.swing.JComboBox<String> startComboBox;
     private javax.swing.JLabel startLabel;
+    private javax.swing.JTable tableModel;
     // End of variables declaration//GEN-END:variables
 }
