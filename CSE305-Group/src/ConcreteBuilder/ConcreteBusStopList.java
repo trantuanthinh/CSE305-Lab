@@ -38,7 +38,7 @@ public class ConcreteBusStopList implements BusStopList {
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
         for (BusStop eachBusStop : this.listBusStops) {
-            stringBuilder.append(eachBusStop.getName()).append(" ");
+            stringBuilder.append(eachBusStop.getName()).append(" -> ");
         }
         return stringBuilder.toString();
     }

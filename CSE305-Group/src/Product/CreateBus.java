@@ -16,26 +16,105 @@ public class CreateBus {
 
     static {
         // Create Bus Stops
-        BusStop bs1 = new ConcreteBusStop.Builder().setName("HCM").build();
-        BusStop bs2 = new ConcreteBusStop.Builder().setName("Binh Duong").build();
-        BusStop bs3 = new ConcreteBusStop.Builder().setName("Da Nang").build();
-        BusStop bs4 = new ConcreteBusStop.Builder().setName("Hai Phong").build();
-        BusStop bs5 = new ConcreteBusStop.Builder().setName("Can Tho").build();
-        BusStop bs6 = new ConcreteBusStop.Builder().setName("Quang Ninh").build();
-        BusStop bs7 = new ConcreteBusStop.Builder().setName("Hue").build();
-        BusStop bs8 = new ConcreteBusStop.Builder().setName("Dak Lak").build();
-        BusStop bs9 = new ConcreteBusStop.Builder().setName("Vung Tau").build();
-        BusStop bs10 = new ConcreteBusStop.Builder().setName("Kien Giang").build();
-        BusStop bs11 = new ConcreteBusStop.Builder().setName("Bac Ninh").build();
-        BusStop bs12 = new ConcreteBusStop.Builder().setName("Hoa Binh").build();
-        BusStop bs13 = new ConcreteBusStop.Builder().setName("Nam Dinh").build();
-        BusStop bs14 = new ConcreteBusStop.Builder().setName("Phu Yen").build();
-        BusStop bs15 = new ConcreteBusStop.Builder().setName("Tuyen Quang").build();
-        BusStop bs16 = new ConcreteBusStop.Builder().setName("Bac Lieu").build();
-        BusStop bs17 = new ConcreteBusStop.Builder().setName("Quang Ngai").build();
-        BusStop bs18 = new ConcreteBusStop.Builder().setName("Lang Son").build();
-        BusStop bs19 = new ConcreteBusStop.Builder().setName("Thai Binh").build();
-        BusStop bs20 = new ConcreteBusStop.Builder().setName("Ben Tre").build();
+        BusStop bs1 = new ConcreteBusStop.Builder()
+                .setName("HCM")
+                .setTime("08:00 AM")
+                .build();
+
+        BusStop bs2 = new ConcreteBusStop.Builder()
+                .setName("Binh Duong")
+                .setTime("08:30 AM")
+                .build();
+
+        BusStop bs3 = new ConcreteBusStop.Builder()
+                .setName("Da Nang")
+                .setTime("09:00 AM")
+                .build();
+
+        BusStop bs4 = new ConcreteBusStop.Builder()
+                .setName("Hai Phong")
+                .setTime("09:30 AM")
+                .build();
+
+        BusStop bs5 = new ConcreteBusStop.Builder()
+                .setName("Can Tho")
+                .setTime("10:00 AM")
+                .build();
+
+        BusStop bs6 = new ConcreteBusStop.Builder()
+                .setName("Quang Ninh")
+                .setTime("10:30 AM")
+                .build();
+
+        BusStop bs7 = new ConcreteBusStop.Builder()
+                .setName("Hue")
+                .setTime("11:00 AM")
+                .build();
+
+        BusStop bs8 = new ConcreteBusStop.Builder()
+                .setName("Dak Lak")
+                .setTime("11:30 AM")
+                .build();
+
+        BusStop bs9 = new ConcreteBusStop.Builder()
+                .setName("Vung Tau")
+                .setTime("12:00 PM")
+                .build();
+
+        BusStop bs10 = new ConcreteBusStop.Builder()
+                .setName("Kien Giang")
+                .setTime("12:30 PM")
+                .build();
+
+        BusStop bs11 = new ConcreteBusStop.Builder()
+                .setName("Bac Ninh")
+                .setTime("01:00 PM")
+                .build();
+
+        BusStop bs12 = new ConcreteBusStop.Builder()
+                .setName("Hoa Binh")
+                .setTime("01:30 PM")
+                .build();
+
+        BusStop bs13 = new ConcreteBusStop.Builder()
+                .setName("Nam Dinh")
+                .setTime("02:00 PM")
+                .build();
+
+        BusStop bs14 = new ConcreteBusStop.Builder()
+                .setName("Phu Yen")
+                .setTime("02:30 PM")
+                .build();
+
+        BusStop bs15 = new ConcreteBusStop.Builder()
+                .setName("Tuyen Quang")
+                .setTime("03:00 PM")
+                .build();
+
+        BusStop bs16 = new ConcreteBusStop.Builder()
+                .setName("Bac Lieu")
+                .setTime("03:30 PM")
+                .build();
+
+        BusStop bs17 = new ConcreteBusStop.Builder()
+                .setName("Quang Ngai")
+                .setTime("04:00 PM")
+                .build();
+
+        BusStop bs18 = new ConcreteBusStop.Builder()
+                .setName("Lang Son")
+                .setTime("04:30 PM")
+                .build();
+
+        BusStop bs19 = new ConcreteBusStop.Builder()
+                .setName("Thai Binh")
+                .setTime("05:00 PM")
+                .build();
+
+        BusStop bs20 = new ConcreteBusStop.Builder()
+                .setName("Ben Tre")
+                .setTime("05:30 PM")
+                .build();
 
         // Create Bus Stop List
         busStopList = new ConcreteBusStopList.Builder()

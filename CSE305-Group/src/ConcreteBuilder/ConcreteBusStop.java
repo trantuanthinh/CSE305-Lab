@@ -5,9 +5,13 @@ import Builder.BusStop;
 public class ConcreteBusStop implements BusStop {
 
     private String name;
+    private String time;
+    private double fare;
 
-    private ConcreteBusStop(String name) {
+    private ConcreteBusStop(String name, String time, double fare) {
         this.name = name;
+        this.time = time;
+        this.fare = fare;
     }
 
     @Override
@@ -15,9 +19,21 @@ public class ConcreteBusStop implements BusStop {
         return this.name;
     }
 
+    @Override
+    public String getTime() {
+        return this.time;
+    }
+
+    @Override
+    public double getFareTo(BusStop destination) {
+        return this.fare;
+    }
+
     public static class Builder implements BusStop.Builder {
 
         private String name;
+        private String time;
+        private double fare = Math.random() * 50;
 
         @Override
         public Builder setName(String name) {
@@ -26,8 +42,14 @@ public class ConcreteBusStop implements BusStop {
         }
 
         @Override
+        public Builder setTime(String time) {
+            this.time = time;
+            return this;
+        }
+
+        @Override
         public BusStop build() {
-            return new ConcreteBusStop(name);
+            return new ConcreteBusStop(name, time, fare);
         }
     }
 }

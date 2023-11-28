@@ -2,6 +2,7 @@ package ConcreteBuilder;
 
 import Builder.BusRoute;
 import Builder.BusStop;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,6 +26,22 @@ public class ConcreteBusRoute implements BusRoute {
         return this.stops;
     }
 
+    @Override
+    public double getTotalFare() {
+        double totalFare = 0;
+        for (int i = 0; i < stops.size() - 1; i++) {
+            totalFare += stops.get(i).getFareTo(stops.get(i + 1));
+        }
+        int decimalPlaces = 2;
+        totalFare = Math.ceil(totalFare * Math.pow(10, decimalPlaces)) / Math.pow(10, decimalPlaces);
+        return totalFare;
+    }
+
+    @Override
+    public int getStopCount() {
+        return stops.size();
+    }
+
     public static class Builder implements BusRoute.Builder {
 
         private int routeNumber;
@@ -38,7 +55,7 @@ public class ConcreteBusRoute implements BusRoute {
 
         @Override
         public Builder addStop(BusStop stop) {
-            this.stops.add(stop);
+            stops.add(stop);
             return this;
         }
 
@@ -47,4 +64,14 @@ public class ConcreteBusRoute implements BusRoute {
             return new ConcreteBusRoute(routeNumber, stops);
         }
     }
+
+    @Override
+    public String toString() {
+        StringBuilder stringBuilder = new StringBuilder();
+        for (BusStop eachBusStop : this.stops) {
+            stringBuilder.append(eachBusStop.getName()).append(" -> ");
+        }
+        return stringBuilder.toString();
+    }
+
 }

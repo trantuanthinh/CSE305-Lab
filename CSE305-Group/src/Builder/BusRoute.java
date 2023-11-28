@@ -8,6 +8,10 @@ public interface BusRoute {
 
     List<BusStop> getStops();
 
+    double getTotalFare();
+
+    int getStopCount();
+
     // Builder pattern for BusRoute
     interface Builder {
 
