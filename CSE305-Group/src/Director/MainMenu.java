@@ -35,34 +35,24 @@ public class MainMenu extends javax.swing.JFrame {
         }
         busStopComboBox.setModel(busStopNumber_Model);
 //-----------------------------
-//        -> Task 2: Output all routes
-//        for (BusRoute eachBusRoute : busRouteList.getBusRouteList()) {
-//            System.out.println("Route Number: " + eachBusRoute.getRouteNumber());
-//            List<BusStop> stops = eachBusRoute.getStops();
-//            System.out.println("Stops: ");
-//            for (BusStop eachStop : stops) {
-//                System.out.println(" - " + eachStop.getName());
-//            }
-//        }
-//-----------------------------
-        int a = 106;
-        List<BusStop> b = findAllBusStop(a);
-        for (BusStop each : b) {
-            System.out.println(each.getName());
-        }
-    }
-//  Task 3
-
-    public List<BusStop> findAllBusStop(int routeNumber) {
+//      ->--Task 2
         for (BusRoute eachBusRoute : busRouteList.getBusRouteList()) {
-            if (eachBusRoute.getRouteNumber() == routeNumber) {
-                return eachBusRoute.getStops();
+            System.out.println("Route Number: " + eachBusRoute.getRouteNumber());
+            List<BusStop> stops = eachBusRoute.getStops();
+            System.out.println("Stops: ");
+            for (BusStop eachStop : stops) {
+                System.out.println(" - " + eachStop.getName());
             }
         }
-        return null;
+//-----------------------------
+//        int a = 106;
+//        List<BusStop> b = findAllBusStop(a);
+//        for (BusStop each : b) {
+//            System.out.println(each.getName());
+//        }
     }
-//Task 1
 
+//    -> Task 1: Input start-end Output 
     public List<BusRoute> findAllRoutes(String startLocation, String endLocation) {
         List<BusRoute> possibleRoutes = new ArrayList<>();
 
@@ -85,6 +75,34 @@ public class MainMenu extends javax.swing.JFrame {
             }
         }
         return -1;
+    }
+
+//    -> Task 2: Output all Routes
+    public List<BusRoute> findAllRoutes() {
+        List<BusRoute> allRoutes = new ArrayList<>();
+        for (BusRoute eachBusRoute : busRouteList.getBusRouteList()) {
+            System.out.println("Route Number: " + eachBusRoute.getRouteNumber());
+            List<BusStop> stops = eachBusRoute.getStops();
+
+//            System.out.println("Stops: ");
+//            for (BusStop eachStop : stops) {
+//                System.out.println(" - " + eachStop.getName());
+//                allRoutes.add(eachStop.getName());
+//            }
+            System.out.println(); // Add a newline for better readability between routes
+        }
+
+        return allRoutes;
+    }
+
+//    -> Task 3: Input routeNumber -> Output all Bus Stops
+    public List<BusStop> findAllBusStop(int routeNumber) {
+        for (BusRoute eachBusRoute : busRouteList.getBusRouteList()) {
+            if (eachBusRoute.getRouteNumber() == routeNumber) {
+                return eachBusRoute.getStops();
+            }
+        }
+        return null;
     }
 
     @SuppressWarnings("unchecked")
