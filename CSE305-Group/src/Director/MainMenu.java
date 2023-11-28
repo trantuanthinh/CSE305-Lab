@@ -123,6 +123,10 @@ public class MainMenu extends javax.swing.JFrame {
         task4Button = new javax.swing.JButton();
         jScrollPane3 = new javax.swing.JScrollPane();
         associateRouteTable = new javax.swing.JTable();
+        jScrollPane5 = new javax.swing.JScrollPane();
+        complainTextArea = new javax.swing.JTextArea();
+        jLabel3 = new javax.swing.JLabel();
+        complainButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -172,7 +176,7 @@ public class MainMenu extends javax.swing.JFrame {
                 .addComponent(endCombobox, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(task1Button, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 83, Short.MAX_VALUE))
+                .addGap(0, 0, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, HomeLayout.createSequentialGroup()
                 .addComponent(jScrollPane1)
                 .addContainerGap())
@@ -227,7 +231,7 @@ public class MainMenu extends javax.swing.JFrame {
                     .addGroup(BusRoutesLayout.createSequentialGroup()
                         .addGap(60, 60, 60)
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 503, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(90, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         BusRoutesLayout.setVerticalGroup(
             BusRoutesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -268,16 +272,18 @@ public class MainMenu extends javax.swing.JFrame {
         RouteLayout.setHorizontalGroup(
             RouteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(RouteLayout.createSequentialGroup()
-                .addGap(56, 56, 56)
                 .addGroup(RouteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 530, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(RouteLayout.createSequentialGroup()
+                        .addGap(56, 56, 56)
                         .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(busStopNameComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(37, 37, 37)
-                        .addComponent(task3Button)))
-                .addContainerGap(67, Short.MAX_VALUE))
+                        .addComponent(task3Button))
+                    .addGroup(RouteLayout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 431, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(162, Short.MAX_VALUE))
         );
         RouteLayout.setVerticalGroup(
             RouteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -287,9 +293,9 @@ public class MainMenu extends javax.swing.JFrame {
                     .addComponent(jLabel2)
                     .addComponent(busStopNameComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(task3Button))
-                .addGap(41, 41, 41)
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 263, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(132, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(16, Short.MAX_VALUE))
         );
 
         jTabbedPane3.addTab("Route", Route);
@@ -323,14 +329,14 @@ public class MainMenu extends javax.swing.JFrame {
             .addGroup(BusStopLayout.createSequentialGroup()
                 .addGap(56, 56, 56)
                 .addGroup(BusStopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 530, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 544, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(BusStopLayout.createSequentialGroup()
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(routeNumberComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(37, 37, 37)
                         .addComponent(task4Button)))
-                .addContainerGap(67, Short.MAX_VALUE))
+                .addContainerGap(49, Short.MAX_VALUE))
         );
         BusStopLayout.setVerticalGroup(
             BusStopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -347,19 +353,52 @@ public class MainMenu extends javax.swing.JFrame {
 
         jTabbedPane3.addTab("Bus Stop", BusStop);
 
+        complainTextArea.setColumns(20);
+        complainTextArea.setRows(5);
+        jScrollPane5.setViewportView(complainTextArea);
+
+        jLabel3.setText("Complain");
+
+        complainButton.setText("Submit");
+        complainButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                complainButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jTabbedPane3))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(473, 473, 473)
+                        .addComponent(complainButton))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jTabbedPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 649, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel3))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jTabbedPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 526, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(15, 15, 15)
+                        .addComponent(jTabbedPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 526, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(107, 107, 107)
+                        .addComponent(jLabel3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(complainButton)))
+                .addContainerGap(29, Short.MAX_VALUE))
         );
 
         pack();
@@ -511,6 +550,10 @@ public class MainMenu extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_task4ButtonActionPerformed
 
+    private void complainButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_complainButtonActionPerformed
+        JOptionPane.showMessageDialog(this, complainTextArea.getText());
+    }//GEN-LAST:event_complainButtonActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -524,14 +567,18 @@ public class MainMenu extends javax.swing.JFrame {
     private javax.swing.JTable associateBusStopTable;
     private javax.swing.JTable associateRouteTable;
     private javax.swing.JComboBox<String> busStopNameComboBox;
+    private javax.swing.JButton complainButton;
+    private javax.swing.JTextArea complainTextArea;
     private javax.swing.JComboBox<String> endCombobox;
     private javax.swing.JLabel endLabel;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JTabbedPane jTabbedPane3;
     private javax.swing.JTable routeAtoBTable;
     private javax.swing.JComboBox<String> routeNumberComboBox;
