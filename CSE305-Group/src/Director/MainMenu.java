@@ -6,9 +6,7 @@ import Builder.BusRoute;
 import Builder.BusStopList;
 import Product.CreateBus;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Vector;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -258,19 +256,17 @@ public class MainMenu extends javax.swing.JFrame {
         String start = startComboBox.getSelectedItem().toString();
         String end = endCombobox.getSelectedItem().toString();
         List<BusRoute> routesFromAToB = findAllRoutes(start, end);
-        
+
         DefaultTableModel tableModel = (DefaultTableModel) this.tableModel.getModel();
         tableModel.setRowCount(0);
 //        !routesFromAToB.isEmpty()
         if (!start.equalsIgnoreCase(end)) {
             System.out.println("Routes found ");
-            
-            
+
             for (BusRoute route : routesFromAToB) {
-                
 
                 System.out.println("Route Number: " + route.getRouteNumber());
-               
+
                 tableModel.addRow(new Object[]{route.getRouteNumber()});
             }
 
@@ -279,8 +275,6 @@ public class MainMenu extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, errorMessage);
             System.out.println(errorMessage);
         }
-
-
     }//GEN-LAST:event_checkButtonActionPerformed
 
     /**
