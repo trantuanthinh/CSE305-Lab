@@ -6,7 +6,9 @@ public interface BusRouteList {
 
     List<BusRoute> getBusRouteList();
 
-        // Builder pattern for BusRouteList
+    List<BusRoute> addBusRoute(BusRoute busRoute);
+
+    // Builder pattern for BusRouteList
     interface Builder {
 
         Builder addRoute(BusRoute route);

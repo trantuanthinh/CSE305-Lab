@@ -1,5 +1,7 @@
 package Director;
 
+import Builder.BusName;
+import Builder.BusNameList;
 import Builder.BusRouteList;
 import Builder.BusStop;
 import Builder.BusRoute;
@@ -15,32 +17,74 @@ public class MainMenu extends javax.swing.JFrame {
 
     private static BusStopList busStopList = CreateBus.getBusStopList();
     private static BusRouteList busRouteList = CreateBus.getBusRouteList();
+    private static BusNameList busNameList = CreateBus.getBusNameList();
+    private static List<String> commentList = new ArrayList<>();
 
     public MainMenu() {
         initComponents();
+        checkOrName.setEnabled(false);
+        checkOrPhone.setEnabled(false);
+        checkRtName.setEnabled(false);
+        checkRtPhone.setEnabled(false);
+        checkDate.setEnabled(false);
+        checkBusName.setEnabled(false);
+        checkTypeOfBus.setEnabled(false);
+        checkNumberOfPeople.setEnabled(false);
+        checkLocation.setEnabled(false);
+        totalCost.setEnabled(false);
+        for (int i = 1; i < 13; i++) {
+            monthComboBox.addItem(String.valueOf(i));
+        }
 
-//        System.out.println(busStopList.getBusStopList().size());
-//        System.out.println(busRouteList.getBusRouteList().size());
+        for (int i = 2023; i < 2040; i++) {
+            yearComboBox.addItem(String.valueOf(i));
+        }
+
         DefaultComboBoxModel locationStart_Model = new DefaultComboBoxModel<>();
         DefaultComboBoxModel locationEnd_Model = new DefaultComboBoxModel<>();
-        DefaultComboBoxModel location = new DefaultComboBoxModel<>();
+        DefaultComboBoxModel location1 = new DefaultComboBoxModel<>();
+        DefaultComboBoxModel location2 = new DefaultComboBoxModel<>();
+        DefaultComboBoxModel busStopNumber_Model = new DefaultComboBoxModel<>();
+        DefaultComboBoxModel busName_Model = new DefaultComboBoxModel<>();
 
         for (BusStop eachBusStop : busStopList.getBusStopList()) {
-//            System.out.println(eachBusStop.getName());dd
             locationStart_Model.addElement(eachBusStop.getName());
             locationEnd_Model.addElement(eachBusStop.getName());
-            location.addElement(eachBusStop.getName());
+            location1.addElement(eachBusStop.getName());
+            location2.addElement(eachBusStop.getName());
         }
-        startComboBox.setModel(locationStart_Model);
-        endCombobox.setModel(locationEnd_Model);
-        busStopNameComboBox.setModel(location);
-
-        DefaultComboBoxModel busStopNumber_Model = new DefaultComboBoxModel<>();
         for (BusRoute eachBusRoute : busRouteList.getBusRouteList()) {
-//            System.out.println(eachBusRoute.getRouteNumber());
             busStopNumber_Model.addElement(eachBusRoute.getRouteNumber());
         }
+
+        for (BusName eachBusName : busNameList.getBusNameList()) {
+            busName_Model.addElement(eachBusName.getBusName());
+        }
+
+        startComboBox.setModel(locationStart_Model);
+        endCombobox.setModel(locationEnd_Model);
+        busStopNameComboBox.setModel(location1);
+        locationComboBox.setModel(location2);
         routeNumberComboBox.setModel(busStopNumber_Model);
+
+        DefaultComboBoxModel busNameCheck_Model = new DefaultComboBoxModel<>();
+        List<BusRoute> checkBusRoute = findAllRoutes(locationComboBox.getSelectedItem().toString());
+        List<BusName> checkBusName = new ArrayList<>();
+
+        for (BusRoute eachBusRoute : checkBusRoute) {
+            BusName checkName = eachBusRoute.getBusName();
+            if (!checkBusName.contains(checkName)) {
+                checkBusName.add(checkName);
+            }
+        }
+        for (BusName eachBusName : checkBusName) {
+            busNameCheck_Model.addElement(eachBusName.getBusName());
+        }
+        busNameComboBox.setModel(busNameCheck_Model);
+    }
+
+    private static boolean isLeapYear(int year) {
+        return (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0);
     }
 
 //    -> Task 1: Input start-end -> Output all Routes from start-end
@@ -94,6 +138,56 @@ public class MainMenu extends javax.swing.JFrame {
         return null;
     }
 
+//    -> Task 5: Booking
+    public double CalculateCost() {
+        String checkLocation = locationComboBox.getSelectedItem().toString();
+        String checkBusName = busNameComboBox.getSelectedItem().toString();
+        double total = 0;
+        for (BusRoute eachBusRoute : busRouteList.getBusRouteList()) {
+            boolean check1 = eachBusRoute.getBusName().toString().equalsIgnoreCase(checkBusName);
+            boolean check2 = false;
+            for (BusStop eachBusStop : eachBusRoute.getStops()) {
+                if (eachBusStop.getName().equalsIgnoreCase(checkLocation)) {
+                    check2 = true;
+                    break;
+                }
+            }
+            if (check1 && check2) {
+                total = eachBusRoute.getTotalFare();
+            }
+        }
+        return total;
+    }
+
+    public void SetDate() {
+        int endDate = 0;
+        switch (monthComboBox.getSelectedItem().toString()) {
+            case "1", "3", "5", "7", "8", "10", "12": {
+                endDate = 31;
+                break;
+            }
+
+            case "4", "6", "9", "11": {
+                endDate = 30;
+                break;
+            }
+
+            case "2": {
+                int year = Integer.parseInt(yearComboBox.getSelectedItem().toString());
+                if (isLeapYear(year)) {
+                    endDate = 29;
+                } else {
+                    endDate = 28;
+                }
+                break;
+            }
+        }
+        for (int i = 1; i < endDate + 1; i++) {
+            dateComboBox.addItem(String.valueOf(i));
+        }
+        dateComboBox.setEnabled(true);
+    }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -107,10 +201,6 @@ public class MainMenu extends javax.swing.JFrame {
         task1Button = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         routeAtoBTable = new javax.swing.JTable();
-        jScrollPane5 = new javax.swing.JScrollPane();
-        complainTextArea = new javax.swing.JTextArea();
-        complainButton = new javax.swing.JButton();
-        jLabel3 = new javax.swing.JLabel();
         jLabel25 = new javax.swing.JLabel();
         BusRoutes = new javax.swing.JPanel();
         task2Button = new javax.swing.JButton();
@@ -133,12 +223,12 @@ public class MainMenu extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
-        jLocation = new javax.swing.JTextField();
-        jBusName = new javax.swing.JTextField();
         jNumberOfPeople = new javax.swing.JTextField();
-        jTypeOfBus = new javax.swing.JComboBox<>();
+        typeOfBusComboBox = new javax.swing.JComboBox<>();
+        busNameComboBox = new javax.swing.JComboBox<>();
+        jLabel6 = new javax.swing.JLabel();
+        locationComboBox = new javax.swing.JComboBox<>();
         jPanel3 = new javax.swing.JPanel();
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
@@ -152,7 +242,11 @@ public class MainMenu extends javax.swing.JFrame {
         jRtName = new javax.swing.JTextField();
         jRtPhone = new javax.swing.JTextField();
         jOrPhone = new javax.swing.JTextField();
-        date = new javax.swing.JTextField();
+        jLabel27 = new javax.swing.JLabel();
+        jLabel28 = new javax.swing.JLabel();
+        dateComboBox = new javax.swing.JComboBox<>();
+        monthComboBox = new javax.swing.JComboBox<>();
+        yearComboBox = new javax.swing.JComboBox<>();
         jPanel4 = new javax.swing.JPanel();
         jLabel12 = new javax.swing.JLabel();
         jLabel15 = new javax.swing.JLabel();
@@ -171,12 +265,18 @@ public class MainMenu extends javax.swing.JFrame {
         jLabel23 = new javax.swing.JLabel();
         jLabel24 = new javax.swing.JLabel();
         totalCost = new javax.swing.JTextField();
-        recelpt = new javax.swing.JButton();
         checkTypeOfBus = new javax.swing.JTextField();
         checkLocation = new javax.swing.JTextField();
         checkNumberOfPeople = new javax.swing.JTextField();
         checkBusName = new javax.swing.JTextField();
         pay = new javax.swing.JButton();
+        Comments = new javax.swing.JPanel();
+        jScrollPane5 = new javax.swing.JScrollPane();
+        commentTextArea = new javax.swing.JTextArea();
+        complainButton = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
+        jScrollPane6 = new javax.swing.JScrollPane();
+        commentTable = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -230,28 +330,6 @@ public class MainMenu extends javax.swing.JFrame {
         jScrollPane1.setViewportView(routeAtoBTable);
 
         Home.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 170, 710, 167));
-
-        complainTextArea.setColumns(20);
-        complainTextArea.setRows(5);
-        jScrollPane5.setViewportView(complainTextArea);
-
-        Home.add(jScrollPane5, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 380, 782, -1));
-
-        complainButton.setFont(new java.awt.Font("Papyrus", 1, 14)); // NOI18N
-        complainButton.setText("Submit");
-        complainButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                complainButtonActionPerformed(evt);
-            }
-        });
-        Home.add(complainButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(920, 480, -1, -1));
-
-        jLabel3.setFont(new java.awt.Font("Papyrus", 1, 18)); // NOI18N
-        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel3.setText("Complain");
-        Home.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 410, -1, -1));
-
-        jLabel25.setIcon(new javax.swing.ImageIcon("E:\\CSE305\\fe9943bf-e33e-45da-b9ed-c65bf5a5fd50.jpg")); // NOI18N
         Home.add(jLabel25, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 50, 960, 450));
 
         Booking.addTab("Home", Home);
@@ -324,9 +402,13 @@ public class MainMenu extends javax.swing.JFrame {
         Booking.addTab("Route", Route);
 
         BusStop.setBackground(new java.awt.Color(204, 204, 255));
+        BusStop.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setFont(new java.awt.Font("Papyrus", 1, 14)); // NOI18N
         jLabel1.setText("Route Number");
+        BusStop.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(375, 39, 108, -1));
+
+        BusStop.add(routeNumberComboBox, new org.netbeans.lib.awtextra.AbsoluteConstraints(489, 38, 164, -1));
 
         task4Button.setFont(new java.awt.Font("Papyrus", 1, 14)); // NOI18N
         task4Button.setText("Show Bus Stops");
@@ -335,6 +417,7 @@ public class MainMenu extends javax.swing.JFrame {
                 task4ButtonActionPerformed(evt);
             }
         });
+        BusStop.add(task4Button, new org.netbeans.lib.awtextra.AbsoluteConstraints(671, 36, -1, -1));
 
         associateRouteTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -349,39 +432,12 @@ public class MainMenu extends javax.swing.JFrame {
         ));
         jScrollPane3.setViewportView(associateRouteTable);
 
-        javax.swing.GroupLayout BusStopLayout = new javax.swing.GroupLayout(BusStop);
-        BusStop.setLayout(BusStopLayout);
-        BusStopLayout.setHorizontalGroup(
-            BusStopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(BusStopLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(routeNumberComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(task4Button)
-                .addGap(189, 189, 189))
-            .addGroup(BusStopLayout.createSequentialGroup()
-                .addGap(50, 50, 50)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 722, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(261, Short.MAX_VALUE))
-        );
-        BusStopLayout.setVerticalGroup(
-            BusStopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(BusStopLayout.createSequentialGroup()
-                .addGap(36, 36, 36)
-                .addGroup(BusStopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(routeNumberComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(task4Button))
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 263, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(190, Short.MAX_VALUE))
-        );
+        BusStop.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 84, 722, 263));
 
         Booking.addTab("Bus Stop", BusStop);
 
         jPanel1.setBackground(new java.awt.Color(204, 255, 204));
+        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel2.setBackground(new java.awt.Color(255, 204, 204));
 
@@ -391,21 +447,19 @@ public class MainMenu extends javax.swing.JFrame {
         jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel5.setText("Type Of Bus");
 
-        jLabel6.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jLabel6.setText("Location");
-
         jLabel7.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel7.setText("Number Of People");
 
-        jNumberOfPeople.setForeground(new java.awt.Color(204, 204, 204));
-        jNumberOfPeople.setText("Over 30");
-        jNumberOfPeople.addActionListener(new java.awt.event.ActionListener() {
+        typeOfBusComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Luxury", "Popular" }));
+
+        jLabel6.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel6.setText("Location");
+
+        locationComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jNumberOfPeopleActionPerformed(evt);
+                locationComboBoxActionPerformed(evt);
             }
         });
-
-        jTypeOfBus.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Select", "Luxury", "Popular" }));
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -414,46 +468,50 @@ public class MainMenu extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(61, 61, 61)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel7)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTypeOfBus, 0, 143, Short.MAX_VALUE)
-                            .addComponent(jBusName)))
+                        .addComponent(jNumberOfPeople, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel6)
-                            .addComponent(jLabel7))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jNumberOfPeople, javax.swing.GroupLayout.DEFAULT_SIZE, 142, Short.MAX_VALUE)
-                            .addComponent(jLocation))))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(jLabel6)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(locationComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel5)
+                                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(typeOfBusComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(busNameComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))))
                 .addContainerGap(21, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(13, 13, 13)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
-                    .addComponent(jBusName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5)
-                    .addComponent(jTypeOfBus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(19, 19, 19)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
-                    .addComponent(jLocation, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(locationComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel5)
+                    .addComponent(typeOfBusComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4)
+                    .addComponent(busNameComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(12, 12, 12)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7)
                     .addComponent(jNumberOfPeople, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(12, Short.MAX_VALUE))
+                .addContainerGap(43, Short.MAX_VALUE))
         );
+
+        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(6, 6, -1, 180));
 
         jPanel3.setBackground(new java.awt.Color(204, 255, 255));
 
@@ -485,10 +543,37 @@ public class MainMenu extends javax.swing.JFrame {
 
         select.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         select.setText("Select");
-
-        date.addActionListener(new java.awt.event.ActionListener() {
+        select.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                dateActionPerformed(evt);
+                selectActionPerformed(evt);
+            }
+        });
+
+        jLabel27.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel27.setText("Month");
+
+        jLabel28.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel28.setText("Year");
+
+        monthComboBox.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                monthComboBoxMouseClicked(evt);
+            }
+        });
+        monthComboBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                monthComboBoxActionPerformed(evt);
+            }
+        });
+
+        yearComboBox.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                yearComboBoxMouseClicked(evt);
+            }
+        });
+        yearComboBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                yearComboBoxActionPerformed(evt);
             }
         });
 
@@ -498,38 +583,48 @@ public class MainMenu extends javax.swing.JFrame {
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(jLabel11)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jRtPhone))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(jLabel10)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jRtName))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addComponent(jLabel9)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jOrName, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(87, 87, 87)
-                        .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(date))
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addComponent(jLabel11)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jRtPhone))
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addComponent(jLabel10)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jRtName))
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addGap(10, 10, 10)
+                                .addComponent(jLabel9)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jOrName, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(6, 6, 6)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(dateComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel27, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(monthComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel28, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(yearComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addComponent(jLabel14)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jOrPhone))))
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(reset)
                         .addGap(38, 38, 38)
-                        .addComponent(select))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(6, 6, 6)
-                        .addComponent(jLabel14)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jOrPhone)))
-                .addContainerGap())
+                        .addComponent(select)))
+                .addGap(20, 20, 20))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -547,7 +642,11 @@ public class MainMenu extends javax.swing.JFrame {
                     .addComponent(jLabel10)
                     .addComponent(jRtName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel13)
-                    .addComponent(date, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel27)
+                    .addComponent(dateComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(monthComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel28)
+                    .addComponent(yearComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel11)
@@ -559,125 +658,203 @@ public class MainMenu extends javax.swing.JFrame {
                 .addContainerGap(23, Short.MAX_VALUE))
         );
 
+        jPanel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(319, 0, 650, -1));
+
         jPanel4.setBackground(new java.awt.Color(255, 255, 204));
-        jPanel4.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel12.setFont(new java.awt.Font("Papyrus", 1, 18)); // NOI18N
         jLabel12.setText("Check Organization Information");
-        jPanel4.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(6, 6, -1, -1));
 
         jLabel15.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel15.setText("Organization's Name");
-        jPanel4.add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(22, 47, -1, -1));
 
         jLabel16.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel16.setText("Representative's Name");
-        jPanel4.add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(22, 91, -1, -1));
 
         jLabel17.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel17.setText("Representative's Phone");
-        jPanel4.add(jLabel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(22, 131, -1, -1));
 
         jLabel18.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel18.setText("Organization's Phone");
-        jPanel4.add(jLabel18, new org.netbeans.lib.awtextra.AbsoluteConstraints(22, 171, -1, -1));
 
         jLabel19.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel19.setText("Date");
-        jPanel4.add(jLabel19, new org.netbeans.lib.awtextra.AbsoluteConstraints(125, 211, 43, -1));
-        jPanel4.add(checkOrName, new org.netbeans.lib.awtextra.AbsoluteConstraints(209, 47, 137, -1));
-        jPanel4.add(checkOrPhone, new org.netbeans.lib.awtextra.AbsoluteConstraints(209, 171, 137, -1));
-        jPanel4.add(checkRtName, new org.netbeans.lib.awtextra.AbsoluteConstraints(209, 91, 137, -1));
-        jPanel4.add(checkRtPhone, new org.netbeans.lib.awtextra.AbsoluteConstraints(209, 131, 137, -1));
-        jPanel4.add(checkDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(209, 211, 137, -1));
 
         jLabel20.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel20.setText("Bus Name");
-        jPanel4.add(jLabel20, new org.netbeans.lib.awtextra.AbsoluteConstraints(403, 49, 70, -1));
 
         jLabel21.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel21.setText("Type Of Bus");
-        jPanel4.add(jLabel21, new org.netbeans.lib.awtextra.AbsoluteConstraints(403, 91, 91, -1));
 
         jLabel22.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel22.setText("Location");
-        jPanel4.add(jLabel22, new org.netbeans.lib.awtextra.AbsoluteConstraints(403, 131, -1, -1));
 
         jLabel23.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel23.setText("Number Of People");
-        jPanel4.add(jLabel23, new org.netbeans.lib.awtextra.AbsoluteConstraints(403, 171, -1, -1));
 
         jLabel24.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel24.setText("Total Cost");
-        jPanel4.add(jLabel24, new org.netbeans.lib.awtextra.AbsoluteConstraints(419, 211, -1, -1));
-
-        totalCost.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                totalCostActionPerformed(evt);
-            }
-        });
-        jPanel4.add(totalCost, new org.netbeans.lib.awtextra.AbsoluteConstraints(547, 211, 77, -1));
-
-        recelpt.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        recelpt.setText("Recelpt");
-        recelpt.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                recelptActionPerformed(evt);
-            }
-        });
-        jPanel4.add(recelpt, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 250, -1, -1));
-        jPanel4.add(checkTypeOfBus, new org.netbeans.lib.awtextra.AbsoluteConstraints(547, 91, 407, -1));
-        jPanel4.add(checkLocation, new org.netbeans.lib.awtextra.AbsoluteConstraints(547, 131, 407, -1));
 
         checkNumberOfPeople.setForeground(new java.awt.Color(204, 204, 204));
-        checkNumberOfPeople.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                checkNumberOfPeopleActionPerformed(evt);
-            }
-        });
-        jPanel4.add(checkNumberOfPeople, new org.netbeans.lib.awtextra.AbsoluteConstraints(547, 171, 407, -1));
-        jPanel4.add(checkBusName, new org.netbeans.lib.awtextra.AbsoluteConstraints(547, 47, 407, -1));
 
         pay.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         pay.setText("Pay");
-        jPanel4.add(pay, new org.netbeans.lib.awtextra.AbsoluteConstraints(830, 250, -1, -1));
+        pay.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                payActionPerformed(evt);
+            }
+        });
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addContainerGap())
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addGap(6, 6, 6)
+                .addComponent(jLabel12))
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addGap(22, 22, 22)
+                .addComponent(jLabel15)
+                .addGap(44, 44, 44)
+                .addComponent(checkOrName, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(57, 57, 57)
+                .addComponent(jLabel20, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(74, 74, 74)
+                .addComponent(checkBusName, javax.swing.GroupLayout.PREFERRED_SIZE, 407, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addGap(22, 22, 22)
+                .addComponent(jLabel16)
+                .addGap(30, 30, 30)
+                .addComponent(checkRtName, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(57, 57, 57)
+                .addComponent(jLabel21, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(53, 53, 53)
+                .addComponent(checkTypeOfBus, javax.swing.GroupLayout.PREFERRED_SIZE, 407, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addGap(22, 22, 22)
+                .addComponent(jLabel17)
+                .addGap(27, 27, 27)
+                .addComponent(checkRtPhone, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(57, 57, 57)
+                .addComponent(jLabel22)
+                .addGap(86, 86, 86)
+                .addComponent(checkLocation, javax.swing.GroupLayout.PREFERRED_SIZE, 407, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addGap(22, 22, 22)
+                .addComponent(jLabel18)
+                .addGap(41, 41, 41)
+                .addComponent(checkOrPhone, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(57, 57, 57)
+                .addComponent(jLabel23)
+                .addGap(18, 18, 18)
+                .addComponent(checkNumberOfPeople, javax.swing.GroupLayout.PREFERRED_SIZE, 407, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addGap(125, 125, 125)
+                .addComponent(jLabel19, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(41, 41, 41)
+                .addComponent(checkDate, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(73, 73, 73)
+                .addComponent(jLabel24)
+                .addGap(59, 59, 59)
+                .addComponent(totalCost, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addGap(830, 830, 830)
+                .addComponent(pay))
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(12, 12, 12))
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addGap(6, 6, 6)
+                .addComponent(jLabel12)
+                .addGap(12, 12, 12)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel15)
+                    .addComponent(checkOrName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addGap(2, 2, 2)
+                        .addComponent(jLabel20))
+                    .addComponent(checkBusName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(22, 22, 22)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel16)
+                    .addComponent(checkRtName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel21)
+                    .addComponent(checkTypeOfBus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel17)
+                    .addComponent(checkRtPhone, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel22)
+                    .addComponent(checkLocation, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel18)
+                    .addComponent(checkOrPhone, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel23)
+                    .addComponent(checkNumberOfPeople, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel19)
+                    .addComponent(checkDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel24)
+                    .addComponent(totalCost, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(17, 17, 17)
+                .addComponent(pay))
         );
+
+        jPanel1.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(6, 198, -1, -1));
 
         Booking.addTab("Booking", jPanel1);
+
+        Comments.setBackground(new java.awt.Color(204, 204, 255));
+        Comments.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        commentTextArea.setColumns(20);
+        commentTextArea.setRows(5);
+        jScrollPane5.setViewportView(commentTextArea);
+
+        Comments.add(jScrollPane5, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 70, 782, -1));
+
+        complainButton.setFont(new java.awt.Font("Papyrus", 1, 14)); // NOI18N
+        complainButton.setText("Submit");
+        complainButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                complainButtonActionPerformed(evt);
+            }
+        });
+        Comments.add(complainButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(840, 100, -1, -1));
+
+        jLabel3.setFont(new java.awt.Font("Papyrus", 1, 18)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel3.setText("Complain");
+        Comments.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 30, -1, -1));
+
+        commentTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {},
+                {},
+                {},
+                {}
+            },
+            new String [] {
+
+            }
+        ));
+        commentTable.setAutoscrolls(false);
+        jScrollPane6.setViewportView(commentTable);
+
+        Comments.add(jScrollPane6, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 170, 780, 270));
+
+        Booking.addTab("Complain", Comments);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(Booking, javax.swing.GroupLayout.PREFERRED_SIZE, 1033, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(Booking, javax.swing.GroupLayout.PREFERRED_SIZE, 977, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(56, 56, 56))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -735,40 +912,6 @@ public class MainMenu extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "None");
         }
     }//GEN-LAST:event_task1ButtonActionPerformed
-
-    private void task2ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_task2ButtonActionPerformed
-        List<BusRoute> allRoutes = findAllRoutes();
-        if (allRoutes.size() != 0) {
-            DefaultTableModel tableModel = new DefaultTableModel() {
-                @Override
-                public boolean isCellEditable(int row, int column) {
-                    return false;
-                }
-            };
-            tableModel.addColumn("Route Number");
-            tableModel.addColumn("Start Time");
-            tableModel.addColumn("Stops");
-            tableModel.addColumn("End Time");
-            tableModel.addColumn("Total Fare");
-
-            for (BusRoute eachRoute : allRoutes) {
-                List<BusStop> stops = eachRoute.getStops();
-                String startTime = stops.get(0).getTime();
-                String endTime = stops.get(stops.size() - 1).getTime();
-
-                Object[] rowData = {
-                    eachRoute.getRouteNumber(),
-                    startTime,
-                    eachRoute.toString(),
-                    endTime,
-                    eachRoute.getTotalFare(),};
-                tableModel.addRow(rowData);
-            }
-            allRouteTable.setModel(tableModel);
-        } else {
-            JOptionPane.showMessageDialog(this, "None");
-        }
-    }//GEN-LAST:event_task2ButtonActionPerformed
 
     private void task3ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_task3ButtonActionPerformed
         String busStopName = busStopNameComboBox.getSelectedItem().toString();
@@ -836,32 +979,146 @@ public class MainMenu extends javax.swing.JFrame {
     }//GEN-LAST:event_task4ButtonActionPerformed
 
     private void complainButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_complainButtonActionPerformed
-        JOptionPane.showMessageDialog(this, complainTextArea.getText());
+//        JOptionPane.showMessageDialog(this, commentTextArea.getText());
+        String comment = commentTextArea.getText();
+        commentList.add(comment);
+        if (commentList.size() != 0) {
+            DefaultTableModel tableModel = new DefaultTableModel() {
+                @Override
+                public boolean isCellEditable(int row, int column) {
+                    return false;
+                }
+            };
+            tableModel.addColumn("Index");
+            tableModel.addColumn("Comment");
+
+            for (int i = 0; i < commentList.size(); i++) {
+                int index = i + 1;
+                comment = commentList.get(i);
+                Object[] rowData = {
+                    index,
+                    comment};
+                tableModel.addRow(rowData);
+            }
+            commentTable.setModel(tableModel);
+        } else {
+            JOptionPane.showMessageDialog(this, "None");
+        }
     }//GEN-LAST:event_complainButtonActionPerformed
 
-    private void jNumberOfPeopleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jNumberOfPeopleActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jNumberOfPeopleActionPerformed
-
-    private void dateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dateActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_dateActionPerformed
-
     private void resetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_resetActionPerformed
-        // TODO add your handling code here:
+        busNameComboBox.setSelectedIndex(0);
+        typeOfBusComboBox.setSelectedIndex(0);
+        locationComboBox.setSelectedIndex(0);
+        jNumberOfPeople.setText("");
+        jOrName.setText("");
+        jOrPhone.setText("");
+        jRtName.setText("");
+        jRtPhone.setText("");
+        dateComboBox.setSelectedIndex(0);
+        monthComboBox.setSelectedIndex(0);
+        yearComboBox.setSelectedIndex(0);
     }//GEN-LAST:event_resetActionPerformed
 
-    private void checkNumberOfPeopleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkNumberOfPeopleActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_checkNumberOfPeopleActionPerformed
+    private void task2ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_task2ButtonActionPerformed
+        List<BusRoute> allRoutes = findAllRoutes();
+        if (allRoutes.size() != 0) {
+            DefaultTableModel tableModel = new DefaultTableModel() {
+                @Override
+                public boolean isCellEditable(int row, int column) {
+                    return false;
+                }
+            };
+            tableModel.addColumn("Route Number");
+            tableModel.addColumn("Bus Name");
+            tableModel.addColumn("Start Time");
+            tableModel.addColumn("Stops");
+            tableModel.addColumn("End Time");
+            tableModel.addColumn("Total Fare");
 
-    private void totalCostActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_totalCostActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_totalCostActionPerformed
+            for (BusRoute eachRoute : allRoutes) {
+                List<BusStop> stops = eachRoute.getStops();
+                String startTime = stops.get(0).getTime();
+                String endTime = stops.get(stops.size() - 1).getTime();
 
-    private void recelptActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_recelptActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_recelptActionPerformed
+                Object[] rowData = {
+                    eachRoute.getRouteNumber(),
+                    eachRoute.getBusName(),
+                    startTime,
+                    eachRoute.toString(),
+                    endTime,
+                    eachRoute.getTotalFare(),};
+                tableModel.addRow(rowData);
+            }
+            allRouteTable.setModel(tableModel);
+        } else {
+            JOptionPane.showMessageDialog(this, "None");
+        }
+    }//GEN-LAST:event_task2ButtonActionPerformed
+
+    private void selectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectActionPerformed
+        try {
+            int number = Integer.parseInt(jNumberOfPeople.getText());
+            if (number >= 30) {
+                double total = CalculateCost();
+                String.valueOf(total);
+                checkOrName.setText(jOrName.getText());
+                checkOrPhone.setText(jOrPhone.getText());
+                checkRtName.setText(jRtName.getText());
+                checkRtPhone.setText(jRtPhone.getText());
+                checkBusName.setText(busNameComboBox.getSelectedItem().toString());
+                checkTypeOfBus.setText(typeOfBusComboBox.getSelectedItem().toString());
+                checkNumberOfPeople.setText(jNumberOfPeople.getText());
+                checkLocation.setText(locationComboBox.getSelectedItem().toString());
+                String date = dateComboBox.getSelectedItem().toString();
+                String month = monthComboBox.getSelectedItem().toString();
+                String year = yearComboBox.getSelectedItem().toString();
+                checkDate.setText(date + "/" + month + "/" + year);
+                totalCost.setText(String.valueOf(total));
+            } else {
+                JOptionPane.showMessageDialog(this, "Over 30");
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        }
+    }//GEN-LAST:event_selectActionPerformed
+
+    private void locationComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_locationComboBoxActionPerformed
+        DefaultComboBoxModel busNameCheck_Model = new DefaultComboBoxModel<>();
+        List<BusRoute> checkBusRoute = findAllRoutes(locationComboBox.getSelectedItem().toString());
+        List<BusName> checkBusName = new ArrayList<>();
+
+        for (BusRoute eachBusRoute : checkBusRoute) {
+            BusName checkName = eachBusRoute.getBusName();
+            if (!checkBusName.contains(checkName)) {
+                checkBusName.add(checkName);
+            }
+        }
+        for (BusName eachBusName : checkBusName) {
+            busNameCheck_Model.addElement(eachBusName.getBusName());
+        }
+        busNameComboBox.setModel(busNameCheck_Model);
+    }//GEN-LAST:event_locationComboBoxActionPerformed
+
+    private void payActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_payActionPerformed
+        JOptionPane.showMessageDialog(this, "Done");
+    }//GEN-LAST:event_payActionPerformed
+
+    private void monthComboBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_monthComboBoxMouseClicked
+        SetDate();
+    }//GEN-LAST:event_monthComboBoxMouseClicked
+
+    private void yearComboBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_yearComboBoxMouseClicked
+        SetDate();
+    }//GEN-LAST:event_yearComboBoxMouseClicked
+
+    private void yearComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_yearComboBoxActionPerformed
+        SetDate();
+    }//GEN-LAST:event_yearComboBoxActionPerformed
+
+    private void monthComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_monthComboBoxActionPerformed
+        SetDate();
+    }//GEN-LAST:event_monthComboBoxActionPerformed
 
     /**
      * @param args the command line arguments
@@ -871,11 +1128,13 @@ public class MainMenu extends javax.swing.JFrame {
     private javax.swing.JTabbedPane Booking;
     private javax.swing.JPanel BusRoutes;
     private javax.swing.JPanel BusStop;
+    private javax.swing.JPanel Comments;
     private javax.swing.JPanel Home;
     private javax.swing.JPanel Route;
     private javax.swing.JTable allRouteTable;
     private javax.swing.JTable associateBusStopTable;
     private javax.swing.JTable associateRouteTable;
+    private javax.swing.JComboBox<String> busNameComboBox;
     private javax.swing.JComboBox<String> busStopNameComboBox;
     private javax.swing.JTextField checkBusName;
     private javax.swing.JTextField checkDate;
@@ -886,12 +1145,12 @@ public class MainMenu extends javax.swing.JFrame {
     private javax.swing.JTextField checkRtName;
     private javax.swing.JTextField checkRtPhone;
     private javax.swing.JTextField checkTypeOfBus;
+    private javax.swing.JTable commentTable;
+    private javax.swing.JTextArea commentTextArea;
     private javax.swing.JButton complainButton;
-    private javax.swing.JTextArea complainTextArea;
-    private javax.swing.JTextField date;
+    private javax.swing.JComboBox<String> dateComboBox;
     private javax.swing.JComboBox<String> endCombobox;
     private javax.swing.JLabel endLabel;
-    private javax.swing.JTextField jBusName;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -911,6 +1170,8 @@ public class MainMenu extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel24;
     private javax.swing.JLabel jLabel25;
     private javax.swing.JLabel jLabel26;
+    private javax.swing.JLabel jLabel27;
+    private javax.swing.JLabel jLabel28;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -918,7 +1179,6 @@ public class MainMenu extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
-    private javax.swing.JTextField jLocation;
     private javax.swing.JTextField jNumberOfPeople;
     private javax.swing.JTextField jOrName;
     private javax.swing.JTextField jOrPhone;
@@ -933,9 +1193,10 @@ public class MainMenu extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
-    private javax.swing.JComboBox<String> jTypeOfBus;
+    private javax.swing.JScrollPane jScrollPane6;
+    private javax.swing.JComboBox<String> locationComboBox;
+    private javax.swing.JComboBox<String> monthComboBox;
     private javax.swing.JButton pay;
-    private javax.swing.JButton recelpt;
     private javax.swing.JButton reset;
     private javax.swing.JTable routeAtoBTable;
     private javax.swing.JComboBox<String> routeNumberComboBox;
@@ -947,5 +1208,7 @@ public class MainMenu extends javax.swing.JFrame {
     private javax.swing.JButton task3Button;
     private javax.swing.JButton task4Button;
     private javax.swing.JTextField totalCost;
+    private javax.swing.JComboBox<String> typeOfBusComboBox;
+    private javax.swing.JComboBox<String> yearComboBox;
     // End of variables declaration//GEN-END:variables
 }

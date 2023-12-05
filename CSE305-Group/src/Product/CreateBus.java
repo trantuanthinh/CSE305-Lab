@@ -1,9 +1,13 @@
 package Product;
 
+import Builder.BusNameList;
+import Builder.BusName;
 import Builder.BusRoute;
 import Builder.BusRouteList;
 import Builder.BusStop;
 import Builder.BusStopList;
+import ConcreteBuilder.ConcreteBusName;
+import ConcreteBuilder.ConcreteBusNameList;
 import ConcreteBuilder.ConcreteBusRoute;
 import ConcreteBuilder.ConcreteBusRouteList;
 import ConcreteBuilder.ConcreteBusStop;
@@ -13,8 +17,22 @@ public class CreateBus {
 
     static BusStopList busStopList;
     static BusRouteList busRouteList;
+    static BusNameList busNameList;
 
     static {
+        //Create Bus Names
+        BusName bn1 = new ConcreteBusName.Builder().setBusName("Go-A").build();
+        BusName bn2 = new ConcreteBusName.Builder().setBusName("Go-B").build();
+        BusName bn3 = new ConcreteBusName.Builder().setBusName("Go-C").build();
+        BusName bn4 = new ConcreteBusName.Builder().setBusName("Go-D").build();
+
+        busNameList = new ConcreteBusNameList.Builder()
+                .addBusName(bn1)
+                .addBusName(bn2)
+                .addBusName(bn3)
+                .addBusName(bn4)
+                .build();
+
         // Create Bus Stops
         BusStop bs1 = new ConcreteBusStop.Builder()
                 .setName("HCM")
@@ -143,6 +161,7 @@ public class CreateBus {
         // Create Bus Routes
         BusRoute route101 = new ConcreteBusRoute.Builder()
                 .setRouteNumber(101)
+                .setBusName(bn2)
                 .addStop(bs1)
                 .addStop(bs2)
                 .addStop(bs3)
@@ -152,6 +171,7 @@ public class CreateBus {
 
         BusRoute route102 = new ConcreteBusRoute.Builder()
                 .setRouteNumber(102)
+                .setBusName(bn4)
                 .addStop(bs2)
                 .addStop(bs6)
                 .addStop(bs7)
@@ -160,6 +180,7 @@ public class CreateBus {
 
         BusRoute route103 = new ConcreteBusRoute.Builder()
                 .setRouteNumber(103)
+                .setBusName(bn2)
                 .addStop(bs1)
                 .addStop(bs9)
                 .addStop(bs10)
@@ -168,6 +189,7 @@ public class CreateBus {
 
         BusRoute route104 = new ConcreteBusRoute.Builder()
                 .setRouteNumber(104)
+                .setBusName(bn1)
                 .addStop(bs3)
                 .addStop(bs4)
                 .addStop(bs5)
@@ -178,6 +200,7 @@ public class CreateBus {
 
         BusRoute route105 = new ConcreteBusRoute.Builder()
                 .setRouteNumber(105)
+                .setBusName(bn2)
                 .addStop(bs4)
                 .addStop(bs5)
                 .addStop(bs15)
@@ -187,6 +210,7 @@ public class CreateBus {
 
         BusRoute route106 = new ConcreteBusRoute.Builder()
                 .setRouteNumber(106)
+                .setBusName(bn4)
                 .addStop(bs6)
                 .addStop(bs7)
                 .addStop(bs8)
@@ -197,6 +221,7 @@ public class CreateBus {
 
         BusRoute route107 = new ConcreteBusRoute.Builder()
                 .setRouteNumber(107)
+                .setBusName(bn1)
                 .addStop(bs9)
                 .addStop(bs10)
                 .addStop(bs11)
@@ -207,6 +232,8 @@ public class CreateBus {
 
         BusRoute route108 = new ConcreteBusRoute.Builder()
                 .setRouteNumber(108)
+                .setBusName(bn3)
+                .addStop(bs4)
                 .addStop(bs11)
                 .addStop(bs12)
                 .addStop(bs13)
@@ -217,6 +244,7 @@ public class CreateBus {
 
         BusRoute route109 = new ConcreteBusRoute.Builder()
                 .setRouteNumber(109)
+                .setBusName(bn2)
                 .addStop(bs14)
                 .addStop(bs15)
                 .addStop(bs16)
@@ -227,6 +255,7 @@ public class CreateBus {
 
         BusRoute route110 = new ConcreteBusRoute.Builder()
                 .setRouteNumber(110)
+                .setBusName(bn4)
                 .addStop(bs17)
                 .addStop(bs18)
                 .addStop(bs19)
@@ -249,6 +278,10 @@ public class CreateBus {
                 .addRoute(route109)
                 .addRoute(route110)
                 .build();
+    }
+
+    public static BusNameList getBusNameList() {
+        return CreateBus.busNameList;
     }
 
     public static BusStopList getBusStopList() {

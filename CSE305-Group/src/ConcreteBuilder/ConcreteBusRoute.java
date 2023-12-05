@@ -2,6 +2,7 @@ package ConcreteBuilder;
 
 import Builder.BusRoute;
 import Builder.BusStop;
+import Builder.BusName;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,10 +11,12 @@ public class ConcreteBusRoute implements BusRoute {
 
     private int routeNumber;
     private List<BusStop> stops;
+    private BusName busName;
 
-    private ConcreteBusRoute(int routeNumber, List<BusStop> stops) {
+    private ConcreteBusRoute(int routeNumber, List<BusStop> stops, BusName busName) {
         this.routeNumber = routeNumber;
         this.stops = stops;
+        this.busName = busName;
     }
 
     @Override
@@ -24,6 +27,10 @@ public class ConcreteBusRoute implements BusRoute {
     @Override
     public List<BusStop> getStops() {
         return this.stops;
+    }
+
+    public BusName getBusName() {
+        return this.busName;
     }
 
     @Override
@@ -46,10 +53,17 @@ public class ConcreteBusRoute implements BusRoute {
 
         private int routeNumber;
         private List<BusStop> stops = new ArrayList<>();
+        private BusName busName;
 
         @Override
         public Builder setRouteNumber(int routeNumber) {
             this.routeNumber = routeNumber;
+            return this;
+        }
+
+        @Override
+        public Builder setBusName(BusName busName) {
+            this.busName = busName;
             return this;
         }
 
@@ -61,7 +75,7 @@ public class ConcreteBusRoute implements BusRoute {
 
         @Override
         public BusRoute build() {
-            return new ConcreteBusRoute(routeNumber, stops);
+            return new ConcreteBusRoute(routeNumber, stops, busName);
         }
     }
 

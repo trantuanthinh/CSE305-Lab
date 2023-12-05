@@ -14,6 +14,12 @@ public class ConcreteBusRouteList implements BusRouteList {
     }
 
     @Override
+    public List<BusRoute> addBusRoute(BusRoute busRoute) {
+        this.listRoutes.add(busRoute);
+        return this.listRoutes;
+    }
+
+    @Override
     public List<BusRoute> getBusRouteList() {
         return this.listRoutes;
     }
