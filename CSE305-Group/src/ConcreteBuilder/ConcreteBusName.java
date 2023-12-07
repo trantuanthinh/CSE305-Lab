@@ -38,5 +38,4 @@ public class ConcreteBusName implements BusName {
     public String toString() {
         return busName.toString();
     }
-
 }
