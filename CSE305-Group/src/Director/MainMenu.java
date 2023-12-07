@@ -369,7 +369,7 @@ public class MainMenu extends javax.swing.JFrame {
         jLabel2.setBackground(new java.awt.Color(255, 153, 153));
         jLabel2.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(0, 51, 51));
-        jLabel2.setText("Route Number");
+        jLabel2.setText("Bus Stop");
         Route.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 40, 130, -1));
 
         Route.add(busStopNameComboBox, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 40, 157, -1));
